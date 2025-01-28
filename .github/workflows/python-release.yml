@@ -1,12 +1,9 @@
 name: Python Release
 
 on:
-  workflow_dispatch:
-  workflow_run:
-    workflows:
-      - Mega Releaser
-    types:
-      - completed
+  push:
+    branches:
+      - jplatte/py-prerelease
 
 jobs:
   build:
