@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+* Libs/Kotlin **(Breaking)**  Deprecated functions `MessageAttempt.list` and `MessageAttempt.listAttemptsForEndpoint` is removed
+* Libs/Kotlin **(Breaking)**: All uses of `java.time.OffsetDateTime` replaced with `kotlinx.datetime.Instant`
+* Libs/Kotlin **(Breaking)**: All uses of `java.net.URL` in request/response models are replaced with `String`
+* Libs/Kotlin **(Breaking)**: All uses of `Map<String,Any>` in request/response models are replaced with `kotlinx.serialization.json.JsonObject`
 * Libs/Go: Add `Authentication.ExpireAll` (and `ExpireAllWithOptions`)
 * Libs/Go **(Breaking)**: Excluding specific fields on the *Patch models (`ApplicationPatch` for example), all `Nullable{Type}` removed from the models
 * Libs/Go **(Breaking)**: All `Nullable{Type}` (for example `NullableString`) are replaced with a new generic `Nullable[T]` type, the new type can be imported from `github.com/svix/svix-webhooks/go/utils`

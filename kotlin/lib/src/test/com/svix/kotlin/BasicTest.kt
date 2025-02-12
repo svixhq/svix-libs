@@ -6,10 +6,12 @@ import com.svix.kotlin.models.EndpointIn
 import com.svix.kotlin.models.EndpointPatch
 import com.svix.kotlin.models.EventTypeIn
 import com.svix.kotlin.models.MessageIn
-import java.net.URI
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 class BasicTest {
     companion object {
@@ -37,10 +39,12 @@ class BasicTest {
                 MessageIn(
                     eventType = "invoice.paid",
                     payload =
-                        mapOf<String, Any>(
-                            "id" to "invoice_WF7WtCLFFtd8ubcTgboSFNql",
-                            "status" to "paid",
-                            "attempt" to 2,
+                        JsonObject(
+                            mapOf<String, JsonElement>(
+                                "id" to JsonPrimitive("invoice_WF7WtCLFFtd8ubcTgboSFNql"),
+                                "status" to JsonPrimitive("paid"),
+                                "attempt" to JsonPrimitive(2),
+                            )
                         ),
                 ),
             )
@@ -80,10 +84,7 @@ class BasicTest {
             val epOut =
                 svix.endpoint.create(
                     appOut.id,
-                    EndpointIn(
-                        url = URI("https://example.svix.com"),
-                        channels = setOf("ch0", "ch1"),
-                    ),
+                    EndpointIn(url = "https://example.svix.com", channels = setOf("ch0", "ch1")),
                 )
             assertEquals(setOf("ch0", "ch1"), epOut.channels, "initial ep should have 2 channels")
             assertEquals(0, epOut.filterTypes?.size ?: 0, "initial ep should have 0 filter types")
@@ -91,7 +92,9 @@ class BasicTest {
                 svix.endpoint.patch(
                     appOut.id,
                     epOut.id,
-                    EndpointPatch(filterTypes = setOf("event.started", "event.ended")),
+                    EndpointPatch(
+                        filterTypes = MaybeUnset.Present(setOf("event.started", "event.ended"))
+                    ),
                 )
             assertEquals(
                 setOf("ch0", "ch1"),
